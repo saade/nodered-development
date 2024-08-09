@@ -1,0 +1,15 @@
+{
+  "name": "nodered-development",
+  "version": "0.0.1",
+  "author": "Saade",
+  "license": "UNLICENSED",
+  "scripts": {
+    "copy-files": "rsync -av --exclude='node_modules' --include='*/' --include='*.html' --include='*.js' --include='*.json' --exclude='*' ./nodes/ data/node_modules/@govdigital/",
+    "docker:start-nodered": "docker-compose up -d",
+    "docker:stop-nodered": "docker-compose down",
+    "docker:clean": "docker-compose down --volumes",
+    "docker:restart-nodered": "docker-compose restart nodered",
+    "docker:install-module": "./bin/install-module.sh",
+    "docker:restart-nodered-on-change": "nodemon -e html,js,json,css --exec 'npm run copy-files && npm run docker:restart-nodered && docker logs -f nodered'"
+  }
+}

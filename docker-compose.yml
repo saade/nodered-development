@@ -1,0 +1,40 @@
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    ports:
+      - 1880:1880
+    volumes:
+      - ./nodered_data:/data
+      - ./settings.js:/data/settings.js
+    environment:
+      TZ: "America/Sao_Paulo"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: nodered
+      MYSQL_DATABASE: nodered
+      MYSQL_USER: nodered
+      MYSQL_PASSWORD: nodered
+      TZ: "UTC"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql
